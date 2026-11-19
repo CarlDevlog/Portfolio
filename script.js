@@ -111,9 +111,9 @@ document.querySelectorAll(".skills-grid .card").forEach((card) => {
   const legend = document.createElement("ul");
   legend.className = "legend";
   legend.setAttribute("aria-label", "Skill level legend");
-  legend.innerHTML = LEVELS.map(
-    (l) => `<li data-level="${l.toLowerCase()}">${l}</li>`,
-  ).join("");
+  legend.innerHTML =
+    '<li class="legend-title">Skill level <span>· hover or tap a skill</span></li>' +
+    LEVELS.map((l) => `<li data-level="${l.toLowerCase()}">${l}</li>`).join("");
   card.appendChild(legend);
 });
 
