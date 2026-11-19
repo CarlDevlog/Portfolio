@@ -96,3 +96,42 @@ document.addEventListener("keydown", (e) => {
 
 // ---------- Footer year ----------
 document.getElementById("year").textContent = new Date().getFullYear();
+
+// ---------- Skill level legend + tap support ----------
+const LEVELS = [
+  "Beginner",
+  "Amateur",
+  "Intermediate",
+  "Advanced",
+  "Professional",
+];
+
+// Add the legend to the bottom of every skill card
+document.querySelectorAll(".skills-grid .card").forEach((card) => {
+  const legend = document.createElement("ul");
+  legend.className = "legend";
+  legend.setAttribute("aria-label", "Skill level legend");
+  legend.innerHTML = LEVELS.map(
+    (l) => `<li data-level="${l.toLowerCase()}">${l}</li>`,
+  ).join("");
+  card.appendChild(legend);
+});
+
+// Skill chips: keyboard focus + tap to show level on touch screens
+const chips = document.querySelectorAll(".tags li[data-level]");
+chips.forEach((chip) => {
+  chip.tabIndex = 0;
+  chip.setAttribute(
+    "aria-label",
+    `${chip.textContent}, ${chip.dataset.level} level`,
+  );
+  chip.addEventListener("click", (e) => {
+    const wasActive = chip.classList.contains("active");
+    chips.forEach((c) => c.classList.remove("active"));
+    if (!wasActive) chip.classList.add("active");
+    e.stopPropagation();
+  });
+});
+document.addEventListener("click", () =>
+  chips.forEach((c) => c.classList.remove("active")),
+);

@@ -7,7 +7,7 @@
   --bg-start: #000000;
   --bg-end: #757575;
   --green: #19fc4d; /* logo green */
-  --green-soft: #19fc05; /* "Devlog" green */
+  --green-soft: #15ff00; /* "Devlog" green */
   --white: #ffffff;
   --card-top: #868686;
   --card-bottom: #020202;
@@ -104,7 +104,7 @@ button {
   font-family: var(--font-nav);
   color: var(--green-soft);
   font-size: 2rem;
-  text-shadow: 0px 0px 60px lime;
+  text-shadow: 0px 3px 50px lime;
 }
 .brand-code {
   width: 62px;
@@ -478,18 +478,126 @@ button {
   gap: 10px;
 }
 .tags li {
+  position: relative;
   padding: 7px 16px;
   font-size: 0.98rem;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  cursor: default;
+  outline: none;
   transition:
     border-color 0.2s,
-    color 0.2s;
+    box-shadow 0.2s;
 }
-.tags li:hover {
-  border-color: var(--green);
-  color: var(--green);
+
+/* ---------- Skill levels (border colour on hover / tap) ---------- */
+:root {
+  --lvl-beginner: #bfff00; /* lime */
+  --lvl-amateur: #2f9bff; /* blue */
+  --lvl-intermediate: #ff9f1c; /* orange */
+  --lvl-advanced: #ff3b3b; /* red */
+  --lvl-professional: #a855f7; /* purple */
+}
+.tags li[data-level="beginner"] {
+  --lvl: var(--lvl-beginner);
+}
+.tags li[data-level="amateur"] {
+  --lvl: var(--lvl-amateur);
+}
+.tags li[data-level="intermediate"] {
+  --lvl: var(--lvl-intermediate);
+}
+.tags li[data-level="advanced"] {
+  --lvl: var(--lvl-advanced);
+}
+.tags li[data-level="professional"] {
+  --lvl: var(--lvl-professional);
+}
+
+.tags li[data-level]:hover,
+.tags li[data-level]:focus-visible,
+.tags li[data-level].active {
+  border-color: var(--lvl);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--lvl) 55%, transparent);
+}
+
+/* Small label above the chip that names the level (not colour-only) */
+.tags li[data-level]::after {
+  content: attr(data-level);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) translateY(4px);
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  border-radius: 999px;
+  background: #000;
+  color: var(--lvl);
+  border: 1px solid var(--lvl);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  z-index: 5;
+}
+.tags li[data-level]:hover::after,
+.tags li[data-level]:focus-visible::after,
+.tags li[data-level].active::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Legend at the bottom of every skill card */
+.card {
+  display: flex;
+  flex-direction: column;
+}
+.card .tags {
+  margin-bottom: 18px;
+}
+.legend {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: #d6d6d6;
+}
+.legend li::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--lvl);
+  flex: none;
+}
+.legend li[data-level="beginner"] {
+  --lvl: var(--lvl-beginner);
+}
+.legend li[data-level="amateur"] {
+  --lvl: var(--lvl-amateur);
+}
+.legend li[data-level="intermediate"] {
+  --lvl: var(--lvl-intermediate);
+}
+.legend li[data-level="advanced"] {
+  --lvl: var(--lvl-advanced);
+}
+.legend li[data-level="professional"] {
+  --lvl: var(--lvl-professional);
 }
 
 /* ---------- Certificates ---------- */
@@ -564,6 +672,63 @@ button {
 .cert figcaption span {
   font-size: 0.9rem;
   color: #cfcfcf;
+}
+
+/* ---------- Projects ---------- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+}
+.project-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 24px;
+  align-items: center;
+}
+.project-empty svg {
+  width: 56px;
+  height: 56px;
+  color: var(--green);
+  margin-bottom: 16px;
+}
+.project-empty h3 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+.project-empty p {
+  max-width: 460px;
+  color: #d6d6d6;
+  font-size: 1.05rem;
+}
+
+.project-card h3 {
+  font-size: 1.25rem;
+  margin: 16px 0 8px;
+}
+.project-img {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.project-img img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+.project-card:hover .project-img img {
+  transform: scale(1.04);
+}
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: auto;
+}
+.project-links .btn {
+  font-size: 1rem;
+  padding: 10px 20px;
 }
 
 /* ---------- Contacts ---------- */
@@ -695,7 +860,11 @@ button {
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 1100px) {
+/* Compact nav on mid-size screens (six links need the room) */
+@media (max-width: 1500px) {
+  .nav-links {
+    gap: 6px;
+  }
   .nav-links a {
     font-size: 1.1rem;
     padding: 6px 8px;
@@ -706,23 +875,8 @@ button {
   }
 }
 
-@media (max-width: 900px) {
-  :root {
-    --nav-h: 72px;
-  }
-
-  .brand {
-    font-size: 1.6rem;
-  }
-  .brand-dev {
-    font-size: 1.5rem;
-  }
-  .brand-code {
-    width: 44px;
-    height: 28px;
-    color: #b5b5b5;
-  }
-
+/* Hamburger menu */
+@media (max-width: 1250px) {
   .nav-toggle {
     display: flex;
   }
@@ -752,6 +906,28 @@ button {
     font-size: 1.3rem;
     padding: 14px 6px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .nav-links a svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --nav-h: 72px;
+  }
+
+  .brand {
+    font-size: 1.6rem;
+  }
+  .brand-dev {
+    font-size: 1.5rem;
+  }
+  .brand-code {
+    width: 44px;
+    height: 28px;
+    color: #b5b5b5;
   }
 
   .hero {
@@ -796,6 +972,9 @@ button {
 }
 
 @media (max-width: 1100px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .skills-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -821,6 +1000,9 @@ button {
     grid-template-columns: 1fr;
   }
   .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .projects-grid {
     grid-template-columns: 1fr;
   }
 }
